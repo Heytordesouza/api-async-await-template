@@ -35,13 +35,13 @@ export const EditarUsuario = (props) => {
     getDadosUsuario();
   }, []);
 
-  const editaUsuario = () => {
-    const body = {
+  const editaUsuario = async () => {
+    try {
+      const body = {
         name,
         email
       };
-      axios
-        .put(
+      await axios.put(
           `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
           body,
           {
@@ -50,15 +50,16 @@ export const EditarUsuario = (props) => {
             }
           }
         )
-        .then(() => {
           getDadosUsuario();
           setEditar(!editar)
-        });
-  }
+        } catch (error) {
+          console.log(error.response);
+        }
+    }
 
-  const deletarUsuario = () => {
-    axios
-      .delete(
+  const deletarUsuario = async () => {
+    try {
+      await axios.delete(
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
         {
           headers: {
@@ -66,15 +67,15 @@ export const EditarUsuario = (props) => {
           }
         }
       )
-      .then(() => {
         alert("usuario removido");
         // chama de novo o get usuarios pra atualizar a lista
         props.getUsuarios();
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  };
+      } catch (error) {
+        console.log(error.response);
+      }  
+    }
+    
+  
 
 
   return (
